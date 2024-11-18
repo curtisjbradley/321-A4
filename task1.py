@@ -2,6 +2,7 @@ from Crypto.Hash import SHA256
 from Crypto.Random import get_random_bytes
 
 from datetime import datetime as time
+import matplotlib.pyplot as plt
 
 def sha256_hash(input_string):
    data = bytearray(input_string, "ASCII") 
@@ -69,24 +70,29 @@ def task_1c():
     bits_list = []
     time = []
     inputs = []
-    attempts = 50000
+    n_inputs = []
+    attempts = 5000
     for bits in range(8, 50, 2):
         out = find_collision(bits, attempts)
         if out[0] != None:
             bits_list.append(bits)
+            n_inputs.append(out[2])
             inputs.append((out[0],out[1]))
-            time.append(out[3])
+            time.append(out[3].microseconds)
             continue
         else:
             print("Exceeded Max Attempts")
-    print(bits_list)
-    print(time)
-    print(inputs)
-    #Print results table
-   # Plot graphs:
-  #      1. Digest Size vs Collision Time
- #       2. Digest Size vs Number of Inputs
-#    Save graphs as 'collision_analysis.png'
+    
+    fig, ax = plt.subplots(nrows = 2)
+    ax[0].plot(bits_list, time)
+    plt.xlabel('Size of Digest (bits)')
+    ax[0].set_ylabel('Time until Collison (microseconds)')
+    ax[0].set_title('Digest Size vs Collison Time')
+
+    ax[1].plot(bits_list, n_inputs)
+    ax[1].set_ylabel('Number of Inputs until Collison')
+    ax[1].set_title('Digest Size vs Number of Inputs until Collison')
+    plt.show()
 
 task_1a()
 task_1b()
