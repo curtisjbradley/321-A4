@@ -45,6 +45,7 @@ def find_collision(bits, max_attempts):
         h = truncate_hash(sha256_hash(str(s)), bits)
         if h in seen:
             end = time.now()
+            print("Found " + str(bits))
             return seen[h], s, i, (end - start)
         else:
             seen[h] = s
@@ -57,7 +58,7 @@ def task_1a():
         print(word, h)
 def task_1b():
     print("Task 1b: Strings with Hamming distance of 1")
-    for i in range(1, 3):
+    for i in range(0, 3):
         s1 = "Hello World"
         s2 = s1
         s2 = s1[:i] + chr((ord(s2[i]) ^ 1)) + s1[i + 1:]
@@ -71,7 +72,7 @@ def task_1c():
     time = []
     inputs = []
     n_inputs = []
-    attempts = 5000
+    attempts = 50000000
     for bits in range(8, 50, 2):
         out = find_collision(bits, attempts)
         if out[0] != None:
@@ -79,6 +80,8 @@ def task_1c():
             n_inputs.append(out[2])
             inputs.append((out[0],out[1]))
             time.append(out[3].microseconds)
+            print(bits_list)
+            print(n_inputs)
             continue
         else:
             print("Exceeded Max Attempts")
